@@ -205,6 +205,10 @@ li>button {
     margin-left: 5px;
 }
 
+.deletehabit, .edithabit {
+    font-size: 10px;
+}
+
 li>i {
     font-size: 17px;
 }
@@ -227,6 +231,168 @@ li>i {
     background: #555;
 }
 
+/* Start of celebration*/
+#celebration {
+    display: none;
+}
+
+.celebrate {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+.celebrate>div {
+    border: 2px solid #f5cc06;
+    position: absolute;
+    opacity: 0;
+    animation: solta_celebrate .5s ease-in-out 1s forwards;
+}
+
+.celebrate>div.f1 {
+    left: 20%;
+    top: 40%;
+}
+
+.celebrate>div.f2 {
+    left: 15%;
+    top: 70%;
+}
+
+.celebrate>div.f3 {
+    right: 20%;
+    top: 40%;
+}
+
+.celebrate>div.f4 {
+    right: 15%;
+    top: 70%;
+}
+
+.celebrate>div span {
+    width: 6px;
+    height: 6px;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    animation: estoura_celebrate 0.5s ease-in-out 1s forwards;
+}
+
+.celebrate>div span:nth-child(1) {
+    transform: rotate(0deg);
+}
+
+.celebrate>div span:nth-child(2) {
+    transform: rotate(120deg);
+}
+
+.celebrate>div span:nth-child(3) {
+    transform: rotate(240deg);
+}
+
+.celebrate>div span:before {
+    content: '';
+    width: 2px;
+    height: 50px;
+    display: block;
+    background: #e40434;
+    position: absolute;
+    top: -60px;
+    left: 2px;
+}
+
+.celebrate>div span:after {
+    content: '';
+    width: 2px;
+    height: 25px;
+    display: block;
+    background: #f5cc06;
+    position: absolute;
+    bottom: -60px;
+    left: 2px;
+}
+
+.celebrate>div span i:before {
+    content: '';
+    width: 3px;
+    height: 3px;
+    display: block;
+    border-radius: 50%;
+    background: #fff;
+    position: absolute;
+    top: -15px;
+    left: 10px;
+}
+
+.celebrate>div span i:after {
+    content: '';
+    width: 3px;
+    height: 3px;
+    display: block;
+    border-radius: 50%;
+    background: #fff;
+    position: absolute;
+    top: -15px;
+    right: 10px;
+}
+
+@keyframes solta_celebrate {
+    0% {
+        margin-top: 100%;
+        opacity: 0;
+        width: 2px;
+        height: 30px;
+        display: block;
+        border-radius: 50%;
+    }
+
+    75% {
+        margin-top: 0%;
+        opacity: 1;
+        width: 2px;
+        height: 30px;
+        display: block;
+        border-radius: 50%;
+    }
+
+    80% {
+        margin-top: 0px;
+        margin-left: 0px;
+        opacity: 1;
+        width: 10px;
+        height: 10px;
+        display: block;
+        border-radius: 50%;
+        transform: scale(0.2);
+    }
+
+    100% {
+        opacity: 1;
+        width: 10px;
+        height: 10px;
+        display: block;
+        border-radius: 50%;
+        transform: scale(1);
+    }
+}
+
+@keyframes estoura_celebrate {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* End of Congratulations */
 
 @media (max-width: 400px) {
     #habit {
@@ -261,4 +427,7 @@ li>i {
         width: 60%;
     }
 
+    .deletehabit, .edithabit {
+        font-size: 12px;
+    }
 }
