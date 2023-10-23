@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const submitButton = document.getElementById("smbtn");
   const message = document.getElementById("message");
   const listsContainer = document.getElementById("lists");
-
   const clearBtn = document.getElementById("clear");
   const habitHeader = document.querySelector(".habitHeader");
 
@@ -12,14 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (e.key === "Enter") addHabit();
   });
 
-  // Set the value of the date input to the current date (formatted as "YYYY-MM-DD")
-  function renderDate() {
-    const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().split("T")[0];
-    habitDateInput.value = formattedDate;
-  }
-
-  renderDate();
+  // Load habits from localStorage on page load
+  loadHabitsFromLocalStorage();
 
   function addHabit() {
     const input = document.getElementById("habit");
@@ -44,9 +37,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     clearBtn.style.display = "block";
-    habitHeader.textContent = "";
+    habitHeader.textContent = "Your Behavior Scorecard";
     const habitText = input.value.trim();
     const habitState = document.getElementById("state");
+
+    const state = returnState();
+    if (state === "Postive") {
+      const celebrate = document.getElementById("celebration");
+      celebrate.style.display = "block";
+      setTimeout(() => {
+        celebrate.style.display = "none";
+      }, 10000);
+    }
     function returnState(state) {
       if (state === "Positive") {
         return "+";
@@ -56,19 +58,11 @@ document.addEventListener("DOMContentLoaded", function () {
         return "=";
       }
     }
-    const listItem = document.createElement("li");
-    const stateValue = document.createElement("span");
-    stateValue.textContent = returnState(habitState.value);
-    stateValue.className = "habitStateValue";
 
-    listItem.innerHTML = `
-              <span class="habitText">${habitText}</span>
-              <button class="edithabit"><i class="fas fa-pen-square"></i> Edit</button>
-              <button class="deletehabit"><i class="fas fa-trash-alt"></i> Delete</button>
-          `;
-
-    listItem.insertBefore(stateValue, listItem.firstChild);
-
+    const listItem = createHabitListItem(
+      habitText,
+      returnState(habitState.value)
+    );
     const habitList = getOrCreatehabitList(habitDate); // Get or create the habit list
     habitList.appendChild(listItem);
 
@@ -79,18 +73,8 @@ document.addEventListener("DOMContentLoaded", function () {
       message.textContent = "";
     }, 2000);
 
-    listItem.querySelector(".deletehabit").addEventListener("click", () => {
-      listItem.remove();
-    });
-
-    listItem.querySelector(".edithabit").addEventListener("click", () => {
-      const habitSpan = listItem.querySelector(".habitText");
-      const editedText = prompt("Edit the habit:", habitSpan.textContent);
-      if (editedText !== null) {
-        habitSpan.textContent = editedText;
-      }
-    });
-
+    // Save habits to localStorage
+    saveHabitsToLocalStorage();
     renderDate();
   }
 
@@ -98,9 +82,21 @@ document.addEventListener("DOMContentLoaded", function () {
     listsContainer.innerHTML = ""; // Clear all lists
     habitHeader.textContent = "Add to your habit list";
     clearBtn.style.display = "none";
+
+    // Clear habits from localStorage
+    clearHabitsFromLocalStorage();
   }
 
   clearBtn.addEventListener("click", clearList);
+
+  function renderDate() {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split("T")[0];
+    habitDateInput.value = formattedDate;
+  }
+
+  // Call renderDate to set the initial date when the page loads
+  renderDate();
 
   // Get or create a habit list based on the date
   function getOrCreatehabitList(dateString) {
@@ -139,4 +135,94 @@ document.addEventListener("DOMContentLoaded", function () {
     const date = new Date(dateString);
     return date.toLocaleDateString(undefined, options);
   }
+
+  function createHabitListItem(habitText, stateValue) {
+    // Create a new habit list item
+    const listItem = document.createElement("li");
+    const stateValueElement = document.createElement("span");
+    stateValueElement.textContent = stateValue;
+    stateValueElement.className = "habitStateValue";
+
+    listItem.innerHTML = `
+      <span class="habitText">${habitText}</span>
+      <button class="edithabit"><i class="fas fa-pen-square"></i> Edit</button>
+      <button class="deletehabit"><i class="fas fa-trash-alt"></i> Delete</button>
+    `;
+
+    listItem.insertBefore(stateValueElement, listItem.firstChild);
+
+    listItem.querySelector(".deletehabit").addEventListener("click", () => {
+      listItem.remove();
+      // Save habits to localStorage after deleting a habit
+      saveHabitsToLocalStorage();
+    });
+
+    listItem.querySelector(".edithabit").addEventListener("click", () => {
+      const habitSpan = listItem.querySelector(".habitText");
+      const editedText = prompt("Edit the habit:", habitSpan.textContent);
+      if (editedText !== null) {
+        habitSpan.textContent = editedText;
+        // Save habits to localStorage after editing a habit
+        saveHabitsToLocalStorage();
+      }
+    });
+
+    return listItem;
+  }
+
+  function loadHabitsFromLocalStorage() {
+    const habits = JSON.parse(localStorage.getItem("habits")) || {};
+    if (Object.keys(habits).length === 0) {
+      return;
+    }
+  
+    clearBtn.style.display = "block";
+    habitHeader.textContent = "Your Behavior Scorecard";
+  
+    for (const dateString in habits) {
+      const habitList = getOrCreatehabitList(dateString);
+      const habitsForDate = habits[dateString];
+  
+      for (const habit of habitsForDate) {
+        const formattedDate = new Date(dateString);
+        const listItem = createHabitListItem(habit.text, habit.state);
+        habitList.appendChild(listItem);
+      }
+    }
+  }
+  
+  function saveHabitsToLocalStorage() {
+    const habits = {};
+    const habitLists = listsContainer.querySelectorAll(".habitList");
+  
+    for (const habitList of habitLists) {
+      const formattedDate = habitList.querySelector("h2").textContent;
+      const dateString = formatDateForLocalStorage(new Date(formattedDate));
+  
+      const habitsForDate = [];
+      const listItems = habitList.querySelectorAll("li");
+  
+      for (const listItem of listItems) {
+        const habitText = listItem.querySelector(".habitText").textContent;
+        const habitState = listItem.querySelector(".habitStateValue").textContent;
+  
+        habitsForDate.push({ text: habitText, state: habitState });
+      }
+  
+      habits[dateString] = habitsForDate;
+    }
+  
+    localStorage.setItem("habits", JSON.stringify(habits));
+  }
+  
+  function formatDateForLocalStorage(dateString) {
+    const date = new Date(dateString);
+    return date.toISOString(); // Use ISO format
+  }
+  
+
+  function clearHabitsFromLocalStorage() {
+    localStorage.removeItem("habits");
+  }
+
 });
