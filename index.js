@@ -41,14 +41,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const habitText = input.value.trim();
     const habitState = document.getElementById("state");
 
-    const state = returnState();
-    if (state === "Postive") {
+    if (returnState(habitState.value) === "+") {
+      console.log(returnState(habitState.value))
       const celebrate = document.getElementById("celebration");
       celebrate.style.display = "block";
       setTimeout(() => {
         celebrate.style.display = "none";
-      }, 10000);
+      }, 7000);
     }
+
     function returnState(state) {
       if (state === "Positive") {
         return "+";
