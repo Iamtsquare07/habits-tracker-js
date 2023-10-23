@@ -205,7 +205,8 @@ li>button {
     margin-left: 5px;
 }
 
-.deletehabit, .edithabit {
+.deletehabit,
+.edithabit {
     font-size: 10px;
 }
 
@@ -427,7 +428,8 @@ li>i {
         width: 60%;
     }
 
-    .deletehabit, .edithabit {
+    .deletehabit,
+    .edithabit {
         font-size: 12px;
     }
 }
