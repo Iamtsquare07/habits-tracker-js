@@ -5,7 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const listsContainer = document.getElementById("lists");
   const clearBtn = document.getElementById("clear");
   const habitHeader = document.querySelector(".habitHeader");
+  const input = document.getElementById("habit");
 
+  input.focus();
   submitButton.addEventListener("click", addHabit);
   document.getElementById("habit").addEventListener("keypress", function (e) {
     if (e.key === "Enter") addHabit();
@@ -15,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
   loadHabitsFromLocalStorage();
 
   function addHabit() {
-    const input = document.getElementById("habit");
     const habitDate = habitDateInput.value;
     if (input.value.length === 0 || habitDate === "") {
       alert("Please enter a habit");
@@ -42,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const habitState = document.getElementById("state");
 
     if (returnState(habitState.value) === "+") {
-      console.log(returnState(habitState.value))
+      console.log(returnState(habitState.value));
       const celebrate = document.getElementById("celebration");
       celebrate.style.display = "block";
       setTimeout(() => {
@@ -176,14 +177,14 @@ document.addEventListener("DOMContentLoaded", function () {
     if (Object.keys(habits).length === 0) {
       return;
     }
-  
+
     clearBtn.style.display = "block";
     habitHeader.textContent = "Your Behavior Scorecard";
-  
+
     for (const dateString in habits) {
       const habitList = getOrCreatehabitList(dateString);
       const habitsForDate = habits[dateString];
-  
+
       for (const habit of habitsForDate) {
         const formattedDate = new Date(dateString);
         const listItem = createHabitListItem(habit.text, habit.state);
@@ -191,39 +192,38 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   }
-  
+
   function saveHabitsToLocalStorage() {
     const habits = {};
     const habitLists = listsContainer.querySelectorAll(".habitList");
-  
+
     for (const habitList of habitLists) {
       const formattedDate = habitList.querySelector("h2").textContent;
       const dateString = formatDateForLocalStorage(new Date(formattedDate));
-  
+
       const habitsForDate = [];
       const listItems = habitList.querySelectorAll("li");
-  
+
       for (const listItem of listItems) {
         const habitText = listItem.querySelector(".habitText").textContent;
-        const habitState = listItem.querySelector(".habitStateValue").textContent;
-  
+        const habitState =
+          listItem.querySelector(".habitStateValue").textContent;
+
         habitsForDate.push({ text: habitText, state: habitState });
       }
-  
+
       habits[dateString] = habitsForDate;
     }
-  
+
     localStorage.setItem("habits", JSON.stringify(habits));
   }
-  
+
   function formatDateForLocalStorage(dateString) {
     const date = new Date(dateString);
     return date.toISOString(); // Use ISO format
   }
-  
 
   function clearHabitsFromLocalStorage() {
     localStorage.removeItem("habits");
   }
-
 });
