@@ -38,6 +38,12 @@ h1 {
     border-radius: 5px;
 }
 
+.habitStateValue {
+    color: #e5e5fd;
+    font-weight: 600;
+    font-size: 24px;
+}
+
 .output {
     margin: auto;
     width: 90%;
@@ -126,7 +132,8 @@ select:focus {
     width: 100px;
 }
 
-#clear {
+#clear,
+#reset {
     background-color: #5b5bf7bb;
     border-radius: 7px;
     border: 1px solid #6464f7bb;
@@ -134,10 +141,12 @@ select:focus {
     padding: 5px;
     display: none;
     color: #fff;
+    margin-bottom: 5px;
 }
 
 
-#clear:hover {
+#clear:hover,
+#reset:hover {
     background-color: rgb(32, 16, 250);
 }
 
@@ -357,7 +366,7 @@ li>i {
     padding: 10px;
     color: #ffffff;
     font-size: 16px;
-    border-radius:10px;
+    border-radius: 10px;
     transition: background-color 2s ease;
 }
 
