@@ -15,14 +15,14 @@
         <div class="info">
             <p class="p1">Track your habits with the James Clear' Atomic Habits behavior scorecard model.
                 Take a step closer to breaking free from bad habits by bringing them to your conscious mind everyday.
-                Categorize a behavior within a specific state. Try not to judge yourself, simply act as an observer.
+                Categorize a behavior within a specific state. Try not to judge yourself<span
+                    style="font-weight: bold;color:#9fcdf8;" id="user"></span>, simply act as an observer.
             </p>
         </div>
         <div class="input-fields">
             <label for="habit">Habit:</label>
             <div id="inputs">
-                <input id="habit" type="text" placeholder="Eg: Brushed in the moring"
-                    value="" required>
+                <input id="habit" type="text" placeholder="Eg: Brushed in the moring" value="" required>
                 <input id="habitDate" type="date" min="" value="" required>
             </div>
             <label for="state">State:</label><br>
@@ -44,7 +44,10 @@
             <ul id="probody"></ul>
             <div id="lists"></div>
 
-            <div id="clearBox"><button id="clear">Clear List</button></div>
+            <div id="clearBox">
+                <button id="clear">Clear List</button>
+                <button id="reset">Reset All Data</button>
+            </div>
         </div>
     </div>
 
