@@ -4,19 +4,26 @@ document.addEventListener("DOMContentLoaded", function () {
   const message = document.getElementById("message");
   const listsContainer = document.getElementById("lists");
   const clearBtn = document.getElementById("clear");
+  const resetBtn = document.getElementById("reset");
   const habitHeader = document.querySelector(".habitHeader");
   const input = document.getElementById("habit");
   let positiveCount = localStorage.getItem("positiveCount") || 0;
   let firstPositveCount = localStorage.getItem("firstPositveCount") || false;
   let thirdPositveCount = localStorage.getItem("thirdPositveCount") || false;
+  let user = localStorage.getItem("htuser") || "";
+  let userCaptured = localStorage.getItem("userCaptured") || false;
 
-  function clearCongratsMessages() {
+  function resetData() {
     localStorage.removeItem("firstPositveCount");
     localStorage.removeItem("thirdPositveCount");
     localStorage.removeItem("positiveCount");
+    localStorage.removeItem("htuser");
+    localStorage.removeItem("userCaptured");
+
+    clearList();
   }
 
-  // clearCongratsMessages()
+  resetBtn.addEventListener("click", resetData);
 
   input.focus();
   submitButton.addEventListener("click", addHabit);
@@ -29,6 +36,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function addHabit() {
     const habitDate = habitDateInput.value;
+    if (!userCaptured) {
+      user = prompt("What is your name? beloved.", "");
+      while (user.length < 1) {
+        user = prompt("Please provide a valid name", "");
+      }
+      localStorage.setItem("htuser", user);
+
+      userCaptured = true;
+      localStorage.setItem("userCaptured", userCaptured);
+      alert(`Welcome to Habit Tracker. ${user}`);
+    }
     if (input.value.length === 0 || habitDate === "") {
       alert("Please enter a habit");
       input.focus();
@@ -49,7 +67,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     clearBtn.style.display = "block";
-    habitHeader.textContent = "Your Behavior Scorecard";
+    resetBtn.style.display = "block";
+    if (habitHeader.textContent !== `${user}'s Behavior Scorecard`) {
+      habitHeader.textContent = `${user}'s Behavior Scorecard`;
+    }
     const habitText = input.value.trim();
     const habitState = document.getElementById("state");
 
@@ -58,15 +79,14 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!firstPositveCount) {
         firstPositveCount = true;
         localStorage.setItem("firstPositveCount", firstPositveCount);
-        congratulations.textContent = "You earned your first positive habit. Congrats!";
+        congratulations.textContent = `You earned your first positive habit. Congrats ${user}`;
         renderCelebrate();
       } else if (positiveCount === 3) {
         if (!thirdPositveCount) {
           congratulations.textContent =
             "You earned your third positive habit. You're on fire🔥";
         } else {
-          congratulations.textContent =
-            "Somebody call the fire department🔥🔥🔥😲. That's another hattrick of positive habits.";
+          congratulations.textContent = `Somebody call the fire department🔥🔥🔥😲. ${user}, that's another hattrick of positive habits.`;
         }
         renderCelebrate();
         positiveCount = 0;
@@ -119,10 +139,14 @@ document.addEventListener("DOMContentLoaded", function () {
     input.focus();
   }
 
+  //customize the content for user
+  document.getElementById("user").textContent = ` ${user}`;
+
   function clearList() {
     listsContainer.innerHTML = ""; // Clear all lists
     habitHeader.textContent = "Add to your habit list";
     clearBtn.style.display = "none";
+    resetBtn.style.display = "none";
 
     // Clear habits from localStorage
     clearHabitsFromLocalStorage();
@@ -218,7 +242,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     clearBtn.style.display = "block";
-    habitHeader.textContent = "Your Behavior Scorecard";
+    resetBtn.style.display = "block";
+    habitHeader.textContent = `${user}'s Behavior Scorecard`;
 
     for (const dateString in habits) {
       const habitList = getOrCreatehabitList(dateString);
