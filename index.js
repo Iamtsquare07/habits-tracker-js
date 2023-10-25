@@ -6,6 +6,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const clearBtn = document.getElementById("clear");
   const habitHeader = document.querySelector(".habitHeader");
   const input = document.getElementById("habit");
+  let positiveCount = localStorage.getItem("positiveCount") || 0;
+  let firstPositveCount = localStorage.getItem("firstPositveCount") || false;
+  let thirdPositveCount = localStorage.getItem("thirdPositveCount") || false;
+
+  function clearCongratsMessages() {
+    localStorage.removeItem("firstPositveCount");
+    localStorage.removeItem("thirdPositveCount");
+    localStorage.removeItem("positiveCount");
+  }
+
+  // clearCongratsMessages()
 
   input.focus();
   submitButton.addEventListener("click", addHabit);
@@ -43,12 +54,39 @@ document.addEventListener("DOMContentLoaded", function () {
     const habitState = document.getElementById("state");
 
     if (returnState(habitState.value) === "+") {
-      console.log(returnState(habitState.value));
-      const celebrate = document.getElementById("celebration");
-      celebrate.style.display = "block";
-      setTimeout(() => {
-        celebrate.style.display = "none";
-      }, 7000);
+      const congratulations = document.getElementById("congratulations");
+      if (!firstPositveCount) {
+        firstPositveCount = true;
+        localStorage.setItem("firstPositveCount", firstPositveCount);
+        congratulations.textContent = "You earned your first positive habit. Congrats!";
+        renderCelebrate();
+      } else if (positiveCount === 3) {
+        if (!thirdPositveCount) {
+          congratulations.textContent =
+            "You earned your third positive habit. You're on fire🔥";
+        } else {
+          congratulations.textContent =
+            "Somebody call the fire department🔥🔥🔥😲. That's another hattrick of positive habits.";
+        }
+        renderCelebrate();
+        positiveCount = 0;
+        thirdPositveCount = true;
+        localStorage.setItem("positiveCount", positiveCount);
+        localStorage.setItem("thirdPositveCount", thirdPositveCount);
+      }
+
+      function renderCelebrate() {
+        const celebrate = document.getElementById("celebration");
+        celebrate.style.display = "block";
+        congratulations.classList.add("show");
+        setTimeout(() => {
+          celebrate.style.display = "none";
+          congratulations.classList.remove("show");
+        }, 5000);
+      }
+
+      positiveCount++;
+      localStorage.setItem("positiveCount", positiveCount);
     }
 
     function returnState(state) {
@@ -73,11 +111,12 @@ document.addEventListener("DOMContentLoaded", function () {
     message.textContent = "Added!";
     setTimeout(() => {
       message.textContent = "";
-    }, 2000);
+    }, 1000);
 
     // Save habits to localStorage
     saveHabitsToLocalStorage();
     renderDate();
+    input.focus();
   }
 
   function clearList() {
