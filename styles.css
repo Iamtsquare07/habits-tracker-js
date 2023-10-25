@@ -29,7 +29,6 @@ h1 {
     margin-top: 0px;
     padding: 5px 20px 10px 20px;
     border-radius: 10px;
-    margin-left: -10px;
 }
 
 
@@ -53,10 +52,14 @@ h1 {
     /* Enable vertical scrolling */
 }
 
+.output ul {
+    padding-left: 5px;
+}
+
 .habitHeader {
     text-align: center;
     color: #75c7f7;
-    font-size: 1.5vw;
+    font-size: 5vw;
 }
 
 #delbtn {
@@ -72,6 +75,7 @@ h1 {
 #sLett {
     color: blue;
 }
+
 
 .p1 {
     text-align: justify;
@@ -119,7 +123,6 @@ select:focus {
 }
 
 #clearBox {
-    margin-left: 20px;
     width: 100px;
 }
 
@@ -128,7 +131,6 @@ select:focus {
     border-radius: 7px;
     border: 1px solid #6464f7bb;
     text-align: left;
-    margin-left: 20px;
     padding: 5px;
     display: none;
     color: #fff;
@@ -343,6 +345,27 @@ li>i {
     right: 10px;
 }
 
+#congratulations {
+    display: none;
+    position: fixed;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: #eeeeee52;
+    padding: 10px;
+    color: #ffffff;
+    font-size: 16px;
+    border-radius:10px;
+    transition: background-color 2s ease;
+}
+
+#congratulations.show {
+    background-color: #001986;
+    display: block;
+}
+
 @keyframes solta_celebrate {
     0% {
         margin-top: 100%;
@@ -409,13 +432,12 @@ li>i {
 @media only screen and (min-width: 1024px) {
     #inputbox {
         min-width: 500px;
-        width: 40%;
-        margin-left: auto;
+        width: 50%;
     }
 
     .output {
         min-width: 500px;
-        width: 40%;
+        width: 55%;
         padding: 50px 20px 50px 20px;
         min-height: 250px;
     }
@@ -428,8 +450,19 @@ li>i {
         width: 60%;
     }
 
+    .habitHeader {
+        font-size: 22px;
+    }
+
     .deletehabit,
     .edithabit {
         font-size: 12px;
+    }
+
+    #congratulations {
+        padding: 30px 45px 30px 45px;
+        font-weight: 500;
+        font-size: large;
+        border-radius: 30px;
     }
 }
