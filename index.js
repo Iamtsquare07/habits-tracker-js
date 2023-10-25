@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const resetBtn = document.getElementById("reset");
   const habitHeader = document.querySelector(".habitHeader");
   const input = document.getElementById("habit");
+  const userSpan = document.getElementById("user")
   let positiveCount = localStorage.getItem("positiveCount") || 0;
   let firstPositveCount = localStorage.getItem("firstPositveCount") || false;
   let thirdPositveCount = localStorage.getItem("thirdPositveCount") || false;
@@ -70,6 +71,11 @@ document.addEventListener("DOMContentLoaded", function () {
     resetBtn.style.display = "block";
     if (habitHeader.textContent !== `${user}'s Behavior Scorecard`) {
       habitHeader.textContent = `${user}'s Behavior Scorecard`;
+    }
+    
+    //customize the content for user
+    if(userSpan.textContent.length < 1) {
+      userSpan.textContent = ` ${user}`
     }
     const habitText = input.value.trim();
     const habitState = document.getElementById("state");
@@ -138,9 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
     renderDate();
     input.focus();
   }
-
-  //customize the content for user
-  document.getElementById("user").textContent = ` ${user}`;
 
   function clearList() {
     listsContainer.innerHTML = ""; // Clear all lists
@@ -254,6 +257,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const listItem = createHabitListItem(habit.text, habit.state);
         habitList.appendChild(listItem);
       }
+    }
+
+    if(userSpan.textContent.length < 1) {
+      userSpan.textContent = ` ${user}`
     }
   }
 
