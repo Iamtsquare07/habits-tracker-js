@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const resetBtn = document.getElementById("reset");
   const habitHeader = document.querySelector(".habitHeader");
   const input = document.getElementById("habit");
-  const userSpan = document.getElementById("user")
+  const userSpan = document.getElementById("user");
   let positiveCount = localStorage.getItem("positiveCount") || 0;
   let firstPositveCount = localStorage.getItem("firstPositveCount") || false;
   let thirdPositveCount = localStorage.getItem("thirdPositveCount") || false;
@@ -46,8 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       userCaptured = true;
       localStorage.setItem("userCaptured", userCaptured);
-      alert(`Welcome to Habit Tracker. ${user}`);
+      alert(`Welcome to Habit Tracker. ${capitalizeFirstLetter(user)}`);
     }
+
     if (input.value.length === 0 || habitDate === "") {
       alert("Please enter a habit");
       input.focus();
@@ -69,14 +70,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     clearBtn.style.display = "block";
     resetBtn.style.display = "block";
-    if (habitHeader.textContent !== `${user}'s Behavior Scorecard`) {
+    if (habitHeader.textContent !== `${capitalizeFirstLetter(user)}'s Behavior Scorecard`) {
       habitHeader.textContent = `${user}'s Behavior Scorecard`;
     }
-    
+
     //customize the content for user
-    if(userSpan.textContent.length < 1) {
-      userSpan.textContent = ` ${user}`
+    if (userSpan.textContent.length < 1) {
+      userSpan.textContent = ` ${capitalizeFirstLetter(user)}`;
     }
+    
     const habitText = input.value.trim();
     const habitState = document.getElementById("state");
 
@@ -85,44 +87,24 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!firstPositveCount) {
         firstPositveCount = true;
         localStorage.setItem("firstPositveCount", firstPositveCount);
-        congratulations.textContent = `You earned your first positive habit. Congrats ${user}`;
-        renderCelebrate();
+        congratulations.textContent = `You earned your first positive habit. Congrats ${capitalizeFirstLetter(user)}`;
+        renderCelebrate(congratulations);
       } else if (positiveCount === 3) {
         if (!thirdPositveCount) {
           congratulations.textContent =
             "You earned your third positive habit. You're on fire🔥";
         } else {
-          congratulations.textContent = `Somebody call the fire department🔥🔥🔥😲. ${user}, that's another hattrick of positive habits.`;
+          congratulations.textContent = `Somebody call the fire department🔥🔥🔥😲. ${capitalizeFirstLetter(user)}, that's another hattrick of positive habits.`;
         }
-        renderCelebrate();
+        renderCelebrate(congratulations);
         positiveCount = 0;
         thirdPositveCount = true;
         localStorage.setItem("positiveCount", positiveCount);
         localStorage.setItem("thirdPositveCount", thirdPositveCount);
       }
 
-      function renderCelebrate() {
-        const celebrate = document.getElementById("celebration");
-        celebrate.style.display = "block";
-        congratulations.classList.add("show");
-        setTimeout(() => {
-          celebrate.style.display = "none";
-          congratulations.classList.remove("show");
-        }, 5000);
-      }
-
       positiveCount++;
       localStorage.setItem("positiveCount", positiveCount);
-    }
-
-    function returnState(state) {
-      if (state === "Positive") {
-        return "+";
-      } else if (state === "Negative") {
-        return "-";
-      } else {
-        return "=";
-      }
     }
 
     const listItem = createHabitListItem(
@@ -143,6 +125,26 @@ document.addEventListener("DOMContentLoaded", function () {
     saveHabitsToLocalStorage();
     renderDate();
     input.focus();
+  }
+
+  function returnState(state) {
+    if (state === "Positive") {
+      return "+";
+    } else if (state === "Negative") {
+      return "-";
+    } else {
+      return "=";
+    }
+  }
+
+  function renderCelebrate(congratulations) {
+    const celebrate = document.getElementById("celebration");
+    celebrate.style.display = "block";
+    congratulations.classList.add("show");
+    setTimeout(() => {
+      celebrate.style.display = "none";
+      congratulations.classList.remove("show");
+    }, 5000);
   }
 
   function clearList() {
@@ -246,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     clearBtn.style.display = "block";
     resetBtn.style.display = "block";
-    habitHeader.textContent = `${user}'s Behavior Scorecard`;
+    habitHeader.textContent = `${capitalizeFirstLetter(user)}'s Behavior Scorecard`;
 
     for (const dateString in habits) {
       const habitList = getOrCreatehabitList(dateString);
@@ -259,8 +261,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    if(userSpan.textContent.length < 1) {
-      userSpan.textContent = ` ${user}`
+    if (userSpan.textContent.length < 1) {
+      userSpan.textContent = ` ${capitalizeFirstLetter(user)}`;
     }
   }
 
@@ -298,3 +300,16 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.removeItem("habits");
   }
 });
+
+function capitalizeFirstLetter(text) {
+  // Split the string into words
+  const words = text.split(" ");
+
+  // Capitalize the first letter of each word
+  const capitalizedWords = words.map((word) => {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  });
+
+  // Join the capitalized words back together
+  return capitalizedWords.join(" ");
+}
