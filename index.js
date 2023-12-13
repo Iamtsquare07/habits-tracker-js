@@ -289,6 +289,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     localStorage.setItem("habits", JSON.stringify(habits));
+
+    // Check if all dates have no values
+    let allDatesEmpty = true;
+
+    const allDates = Object.keys(habits);
+
+    for (const dateKey of allDates) {
+        const dateValues = habits[dateKey];
+
+        if (dateValues && dateValues.length > 0) {
+            allDatesEmpty = false;
+            break; 
+        }
+    }
+
+    if (allDatesEmpty) {
+        clearList()
+    }
   }
 
   function formatDateForLocalStorage(dateString) {
